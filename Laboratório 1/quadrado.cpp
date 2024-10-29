@@ -24,7 +24,7 @@ void display(void) {
 
 void init (void)  {
   /* selecionar cor de fundo (preto) */
-  glClearColor (0.0, 0.0, 0.0, 0.0);
+  glClearColor (0.0, 1.0, 0.0, 0.0);
 
   /* inicializar sistema de visualizacao */
   glMatrixMode(GL_PROJECTION);
