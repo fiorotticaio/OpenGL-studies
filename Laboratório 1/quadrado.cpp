@@ -2,20 +2,20 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <stdio.h>
-#define TAMANHO_JANELA 500
+#define TAMANHO_JANELA 1000
 
 void display(void) {
    /* Limpar todos os pixels  */
-   glClear (GL_COLOR_BUFFER_BIT);
+   glClear (GL_COLOR_BUFFER_BIT); // Inicializa o buffer de cores
 
    /* Define cor dos vértices com os valores R, G e B variando de 0.0 a 1.0 */
    glColor3f (0.1, 0.8, 1.0);
    /* Desenhar um polígono branco (retângulo) */
-   glBegin(GL_POLYGON);
+   glBegin(GL_TRIANGLES);
       glVertex3f (0.1, 0.1, 0.0);
       glVertex3f (1, 0.1, 2);
       glVertex3f (0.5, 0.75, 0.0);
-      glVertex3f (0.1, 0.75, 0.0);
+      // glVertex3f (0.1, 0.75, 0.0);
    glEnd();
 
    /* Desenhar no frame buffer! */
@@ -36,7 +36,7 @@ int main(int argc, char** argv) {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_RGB);
    glutInitWindowSize (TAMANHO_JANELA, TAMANHO_JANELA); 
-   glutInitWindowPosition (100, 100);
+   glutInitWindowPosition (500, 0);
    glutCreateWindow ("hello world");
    init ();
    glutDisplayFunc(display); 
