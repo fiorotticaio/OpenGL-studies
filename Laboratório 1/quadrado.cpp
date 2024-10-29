@@ -11,6 +11,25 @@ float gY = 0.0;
 /* Vetor para armazenar o estado de cada tecla (press = 1, ñ-press = 0) */
 int keyStatus[256];
 
+void display(void) {
+   /* Limpar todos os pixels  */
+   glClear (GL_COLOR_BUFFER_BIT); // Inicializa o buffer de cores
+
+   /* Define cor dos vértices com os valores R, G e B variando de 0.0 a 1.0 */
+   glColor3f (1.0, 1.0, 1.0);
+
+   /* Desenhar um polígono branco (retângulo) */
+   glBegin(GL_POLYGON);
+      glVertex3f (0.00 + gX, 0.00 + gY, 0.0);
+      glVertex3f (0.50 + gX, 0.00 + gY, 0.0);
+      glVertex3f (0.50 + gX, 0.50 + gY, 0.0);
+      glVertex3f (0.00 + gX, 0.50 + gY, 0.0);
+   glEnd();
+
+   /* Desenhar no frame buffer! */
+   glutSwapBuffers(); //Funcao apropriada para janela double buffer
+}
+
 void keyPress(unsigned char key, int x, int y) {
    if(key == 'w') {
       keyStatus['w'] = 1;
@@ -58,34 +77,18 @@ void idle(void) {
    glutPostRedisplay();
 }
 
-void mouse(int button, int state, int x, int y) {
+void motion(int x, int y) {
    /* Inverter o y */
    y = TAMANHO_JANELA - y;
 
-   printf("Mouse: %d %d %d %d\n", button, state, x, y);
+   printf("Motion: %d %d\n", x, y);
 
    /* Fazer gX e gY receberem a posição do clique do mouse */
    gX = (float)x / TAMANHO_JANELA;
    gY = (float)y / TAMANHO_JANELA;
-}
 
-void display(void) {
-   /* Limpar todos os pixels  */
-   glClear (GL_COLOR_BUFFER_BIT); // Inicializa o buffer de cores
-
-   /* Define cor dos vértices com os valores R, G e B variando de 0.0 a 1.0 */
-   glColor3f (1.0, 1.0, 1.0);
-
-   /* Desenhar um polígono branco (retângulo) */
-   glBegin(GL_POLYGON);
-      glVertex3f (0.00 + gX, 0.00 + gY, 0.0);
-      glVertex3f (0.50 + gX, 0.00 + gY, 0.0);
-      glVertex3f (0.50 + gX, 0.50 + gY, 0.0);
-      glVertex3f (0.00 + gX, 0.50 + gY, 0.0);
-   glEnd();
-
-   /* Desenhar no frame buffer! */
-   glutSwapBuffers(); //Funcao apropriada para janela double buffer
+   /* Indicar que a tela deve ser renderizada novamente */
+   glutPostRedisplay();
 }
 
 void init (void)  {
@@ -116,8 +119,8 @@ int main(int argc, char** argv) {
    /* Registrar a função de callback para idle */
    glutIdleFunc(idle);
 
-   /* Registrar a função de callback para mouse */
-   glutMouseFunc(mouse);
+   /* Registra a função de deslize do mouse clicado */
+   glutMotionFunc(motion);
 
    glutMainLoop();
 
