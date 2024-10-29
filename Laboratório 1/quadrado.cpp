@@ -9,7 +9,7 @@ void display(void) {
    glClear (GL_COLOR_BUFFER_BIT);
 
    /* Define cor dos vértices com os valores R, G e B variando de 0.0 a 1.0 */
-   glColor3f (1.0, 1.0, 1.0);
+   glColor3f (0.1, 0.8, 1.0);
    /* Desenhar um polígono branco (retângulo) */
    glBegin(GL_POLYGON);
       glVertex3f (0.1, 0.1, 0.0);
