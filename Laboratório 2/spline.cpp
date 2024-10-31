@@ -2,14 +2,22 @@
 #include <GL/glu.h>
 #include <stdlib.h>
 #include <GL/glut.h>
+
 #define TAMANHO_JANELA 500
+#define QTD_MIN_PONTOS 2
+#define QTD_MAX_PONTOS 100
 
 float size = 1.0;
 
+int qtdPontos = 4;
+
 //Pontos de controle da Spline
-GLfloat ctrlpoints[4][3] = {
-        { -0.8, -0.8, 0.0}, { -0.4, 0.8, 0.0}, 
-        {0.4, -0.8, 0.0}, {0.8, 0.8, 0.0}};
+GLfloat ctrlpoints[QTD_MAX_PONTOS][3] = {
+   { -0.8, -0.8, 0.0}, 
+   { -0.4, 0.8, 0.0}, 
+   {0.4, -0.8, 0.0}, 
+   {0.8, 0.8, 0.0}
+};
 
 void init(void) {
    glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -17,7 +25,7 @@ void init(void) {
    glEnable(GL_MAP1_VERTEX_3);
 
    //Definicao do polinomio com os pontos de controle
-   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, 4, &ctrlpoints[0][0]); 
+   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, qtdPontos, &ctrlpoints[0][0]); 
    
    //Muda para a matriz de projecao (aulas futuras)
    glMatrixMode(GL_PROJECTION);
@@ -45,7 +53,7 @@ void display(void) {
    glPointSize(5.0);
    glColor3f(1.0, 1.0, 0.0);
    glBegin(GL_POINTS);
-      for (i = 0; i < 4; i++) 
+      for (i = 0; i < qtdPontos; i++) 
          glVertex3fv(&ctrlpoints[i][0]);
    glEnd();
    
@@ -79,7 +87,7 @@ void motion(int x, int y) {
    GLfloat yf = 1.0 - (2.0*y)/TAMANHO_JANELA;
    
    //Atualiza o ponto de controle clicado (dentro de um raio de 30 pixels)
-   for (int i = 0; i < 4; i++) {
+   for (int i = 0; i < qtdPontos; i++) {
       if (abs(xf - ctrlpoints[i][0]) < 0.1 && abs(yf - ctrlpoints[i][1]) < 0.1) { // 0.1 = 30/TAMANHO_JANELA
          ctrlpoints[i][0] = xf;
          ctrlpoints[i][1] = yf;
@@ -87,9 +95,41 @@ void motion(int x, int y) {
       }
    }
 
+   // Definicao do polinomio com os pontos de controle
+   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, qtdPontos, &ctrlpoints[0][0]); 
+
    //Indica que a tela deve ser renderizada novamente
    glutPostRedisplay();
 }
+
+void keyPress(unsigned char key, int x, int y) {
+   if(key == '+') { // Adiciona ponto
+      if (qtdPontos < QTD_MAX_PONTOS) { 
+         ctrlpoints[qtdPontos][0] = 0;
+         ctrlpoints[qtdPontos][1] = 0;
+         ctrlpoints[qtdPontos][2] = 0;
+         qtdPontos++;
+      }
+   }
+
+   if (key == '-') {
+      if (qtdPontos > QTD_MIN_PONTOS) {
+         qtdPontos--;
+      }
+   }
+
+   // Definicao do polinomio com os pontos de controle
+   glMap1f(GL_MAP1_VERTEX_3, 0.0, 1.0, 3, qtdPontos, &ctrlpoints[0][0]); 
+
+   /* Indicar que a tela deve ser renderizada novamente */
+   glutPostRedisplay();
+}
+
+void idle(void) {
+   /* Indicar que a tela deve ser renderizada novamente */
+   glutPostRedisplay();
+}
+
 
 int main(int argc, char** argv) {
    glutInit(&argc, argv);
@@ -101,6 +141,8 @@ int main(int argc, char** argv) {
    glutDisplayFunc(display);
    // glutReshapeFunc(reshape);
    glutMotionFunc(motion);
+   glutKeyboardFunc(keyPress);
+   glutIdleFunc(idle);
    glutMainLoop();
    return 0;
 }
