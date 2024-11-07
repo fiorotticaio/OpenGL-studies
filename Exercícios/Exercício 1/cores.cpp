@@ -2,6 +2,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 #include <stdio.h>
+#include <cmath>
 #define TAMANHO_JANELA 500
 
 //Pontos do triangulo
@@ -117,6 +118,49 @@ void motion(int x, int y){
             */
 
             printf("Ponto de interseção: (%f, %f)\n", pProjX, pProjY);
+
+            // Calculando a cor de fundo a partir da contribuição das três primárias
+            // Reta que vai do ponto clicado ao ponto azul
+            float e = pBx - pCliqueX;
+            float f = pBy - pCliqueY;
+            // Módulo do vetor
+            float mod = sqrt(e * e + f * f);
+
+            // Reta que vai do ponto projetado ao azul
+            float g = pBx - pProjX;
+            float h = pBy - pProjY;
+            // Módulo do vetor
+            float mod2 = sqrt(g * g + h * h);
+
+            gB = 1 - (mod/mod2);
+
+            // Reta que vai do ponto projetado ao ponto vermelho
+            float i = pRx - pProjX;
+            float j = pRy - pProjY;
+            // Módulo do vetor
+            float mod3 = sqrt(i * i + j * j);
+
+            // Reta que vai do ponto verde ao ponto vermelho
+            float k = pGx - pRx;
+            float l = pGy - pRy;
+            // Módulo do vetor
+            float mod4 = sqrt(k * k + l * l);
+
+            gR = (1 - (mod3/mod4)) * (mod/mod2);
+
+            // Reta que vai do ponto projetado ao ponto verde
+            float m = pGx - pProjX;
+            float n = pGy - pProjY;
+            // Módulo do vetor
+            float mod5 = sqrt(m * m + n * n);
+
+            // Reta que vai do ponto verde ao ponto vermelho
+            float o = pGx - pRx;
+            float p = pGy - pRy;
+            // Módulo do vetor
+            float mod6 = sqrt(o * o + p * p);
+
+            gG = (1 - (mod5/mod6)) * (mod/mod2);
         }
 
     } else if (draggingPointR){
