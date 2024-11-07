@@ -161,6 +161,8 @@ void motion(int x, int y){
             float mod6 = sqrt(o * o + p * p);
 
             gG = (1 - (mod5/mod6)) * (mod/mod2);
+
+            printf("gR %f, gG %f, gB %f\n", gR, gG, gB);
         }
 
     } else if (draggingPointR){

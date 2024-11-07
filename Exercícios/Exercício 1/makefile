@@ -6,7 +6,7 @@ CXX = g++
 #  -Wall turns on most, but not all, compiler warnings
 CFLAGS  = -g -Wall
 LINKING = -lglut -lGL -lGLU
-TARGET = *
+TARGET = cores
 
 all:
 	$(CXX) $(CFLAGS) -o out $(TARGET).cpp $(LINKING)
