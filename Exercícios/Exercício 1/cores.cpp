@@ -86,6 +86,38 @@ void motion(int x, int y){
 		/**
 			COLOQUE SEU CODIGO AQUI
 		**/
+        
+        // Atualizar a posição do ponto projetado
+        // Reta formada pelo ponto azul e o ponto clicado
+        float a = pBx - pCliqueX;
+        printf("a = %f\n", a);
+        float b = pBy - pCliqueY;
+        printf("b = %f\n", b);
+
+        // Reta formada pelos pontos vermelho e verde
+        float c = pGx - pRx;
+        printf("c = %f\n", c);
+        float d = pGy - pRy;
+        printf("d = %f\n", d);
+
+        float det = -a * d + b * c;
+        if (det == 0) {
+            printf("As retas são paralelas e não se interceptam.\n");
+        } else {
+            // Solução de um sistema de equações lineares
+            float t = ((pRx - pCliqueX) * (-d) + (pRy - pCliqueY) * c) / det;
+            float s = (a * (pRy - pCliqueY) - b * (pRx - pCliqueX)) / det;
+
+            pProjX = pCliqueX + t * a;
+            pProjY = pCliqueY + t * b;
+
+            /* Ou
+            pProjX = pRx + s * c;
+            pProjY = pRy + s * d;
+            */
+
+            printf("Ponto de interseção: (%f, %f)\n", pProjX, pProjY);
+        }
 
     } else if (draggingPointR){
         pRx = (GLfloat)x/TAMANHO_JANELA;
