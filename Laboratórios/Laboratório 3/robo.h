@@ -34,9 +34,9 @@ public:
     Robo(){
         gX = 0; 
         gY = -200; 
-        gTheta1 = 0; 
-        gTheta2 = 0; 
-        gTheta3 = 0; 
+        gTheta1 = -10; 
+        gTheta2 = -20; 
+        gTheta3 = -30; 
         gThetaWheel = 0; 
     };
     void Desenha(){ 

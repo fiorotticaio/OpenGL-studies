@@ -8,7 +8,7 @@
 #include "alvo.h"
 
 #define INC_KEY 1
-#define INC_KEYIDLE 0.01
+#define INC_KEYIDLE 1
 
 //Key status
 int keyStatus[256];
@@ -123,12 +123,30 @@ void init(void) {
 void idle(void) {
     double inc = INC_KEYIDLE;
 
-    //Treat keyPress
-    if(keyStatus[(int)('a')]) {
+    // Treat keyPress
+    if (keyStatus[(int)('a')]) {
         robo.MoveEmX(-inc);
     }
-    if(keyStatus[(int)('d')]) {
+    if (keyStatus[(int)('d')]) {
         robo.MoveEmX(inc);
+    }
+    if (keyStatus[(int)('f')]) {
+        robo.RodaBraco1(-inc);
+    }
+    if (keyStatus[(int)('r')]) {
+        robo.RodaBraco1(inc);
+    }
+    if (keyStatus[(int)('g')]) {
+        robo.RodaBraco2(-inc);
+    }
+    if (keyStatus[(int)('t')]) {
+        robo.RodaBraco2(inc);
+    }
+    if (keyStatus[(int)('h')]) {
+        robo.RodaBraco3(-inc);
+    }
+    if (keyStatus[(int)('y')]) {
+        robo.RodaBraco3(inc);
     }
     
     // Trata o tiro (soh permite um tiro por vez)
