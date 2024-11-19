@@ -103,6 +103,8 @@ void ResetKeyStatus() {
 }
 
 void init(void) {
+    robo.Desenha();
+
     ResetKeyStatus();
     // The color the windows will redraw. Its done to erase the previous frame.
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black, no opacity(alpha).
@@ -120,6 +122,7 @@ void init(void) {
 
 void idle(void) {
     double inc = INC_KEYIDLE;
+
     //Treat keyPress
     if(keyStatus[(int)('a')]) {
         robo.MoveEmX(-inc);
