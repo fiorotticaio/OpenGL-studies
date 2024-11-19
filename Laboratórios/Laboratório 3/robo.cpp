@@ -100,5 +100,11 @@ void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yO
 }
 
 Tiro* Robo::Atira() {
-
+    // Calcular a posição e direção do tiro em relação a ponta e direção da última haste
+    GLfloat x = gX + baseWidth/2 + paddleWidth/2;
+    GLfloat y = gY + baseHeight + 3*paddleHeight;
+    GLfloat direction = gTheta1 + gTheta2 + gTheta3;
+    Tiro * tiro = new Tiro(x, y, direction);
+    tiro->Desenha();
+    return tiro;
 }

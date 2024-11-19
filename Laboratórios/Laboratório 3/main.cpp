@@ -148,6 +148,10 @@ void idle(void) {
     if (keyStatus[(int)('y')]) {
         robo.RodaBraco3(inc);
     }
+    if (keyStatus[(int)(' ')]) {
+        if (!tiro)
+            tiro = robo.Atira();
+    }
     
     // Trata o tiro (soh permite um tiro por vez)
     // Poderia usar uma lista para tratar varios tiros
