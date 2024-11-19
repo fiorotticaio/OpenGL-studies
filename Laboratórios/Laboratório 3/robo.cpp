@@ -14,11 +14,28 @@ void Robo::DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat 
 }
 
 void Robo::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B) {
+    glColor3f(R, G, B);
 
+    glPointSize(4.0);
+
+    glBegin(GL_POINTS);
+        for (int i = 0; i < 360; i += 20) {
+            GLfloat angle = 2.0f * M_PI * i / 360;
+            GLfloat x = radius * cos(angle);
+            GLfloat y = radius * sin(angle);   
+            glVertex2f(x, y);
+        }
+    glEnd();
 }
 
 void Robo::DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B) {
+    glPushMatrix();
 
+    glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro da roda
+    glRotatef(thetaWheel, 0, 0, 1); // Rotaciona a roda
+    DesenhaCirc(radiusWheel, R, G, B); // Desenha a roda
+
+    glPopMatrix();
 }
 
 void Robo::DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2, GLfloat theta3) {
@@ -52,6 +69,10 @@ void Robo::DesenhaRobo(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat theta1,
     // Desenha o braço
     DesenhaBraco(0, baseHeight, theta1, theta2, theta3);
 
+    // Desenha as rodas
+    DesenhaRoda(-baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
+    DesenhaRoda(baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
+
 
     glPopMatrix();
 }
@@ -69,7 +90,8 @@ void Robo::RodaBraco3(GLfloat inc) {
 }
 
 void Robo::MoveEmX(GLfloat dx) {
-    gX += dx;
+    gX += dx;    
+    gThetaWheel += -(dx / radiusWheel) * 180 / M_PI;
 }
 
 //Funcao auxiliar de rotacao

@@ -39,7 +39,7 @@ public:
         gTheta3 = -30; 
         gThetaWheel = 0; 
     };
-    void Desenha(){ 
+    void Desenha(){
         DesenhaRobo(gX, gY, gThetaWheel, gTheta1, 
                 gTheta2, gTheta3);
     };
