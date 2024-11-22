@@ -30,50 +30,43 @@ void Robo::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B) {
 
 void Robo::DesenhaRoda(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat R, GLfloat G, GLfloat B) {
     glPushMatrix();
-
-    glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro da roda
-    glRotatef(thetaWheel, 0, 0, 1); // Rotaciona a roda
-    DesenhaCirc(radiusWheel, R, G, B); // Desenha a roda
-
+        glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro da roda
+        glRotatef(thetaWheel, 0, 0, 1); // Rotaciona a roda
+        DesenhaCirc(radiusWheel, R, G, B); // Desenha a roda
     glPopMatrix();
 }
 
 void Robo::DesenhaBraco(GLfloat x, GLfloat y, GLfloat theta1, GLfloat theta2, GLfloat theta3) {
     glPushMatrix();
+        // Desenhar a primeira haste
+        glTranslatef(x, y, 0); // Colocando o sistema de coordenadas na base da primeira haste
+        glRotatef(theta1, 0, 0, 1); // Rotaciona a base
+        DesenhaRect(paddleHeight, paddleWidth, 0.0, 0.0, 1.0); // Desenha a haste em si (retângulo)
 
-    // Desenhar a primeira haste
-    glTranslatef(x, y, 0); // Colocando o sistema de coordenadas na base da primeira haste
-    glRotatef(theta1, 0, 0, 1); // Rotaciona a base
-    DesenhaRect(paddleHeight, paddleWidth, 0.0, 0.0, 1.0); // Desenha a haste em si (retângulo)
+        // Desenhar a segunda haste
+        glTranslatef(0, paddleHeight, 0); // Colocando o sistema de coordenadas na base da segunda haste
+        glRotatef(theta2, 0, 0, 1); // Rotaciona a base
+        DesenhaRect(paddleHeight, paddleWidth, 1.0, 1.0, 0.0); // Desenha a haste em si (retângulo)
 
-    // Desenhar a segunda haste
-    glTranslatef(0, paddleHeight, 0); // Colocando o sistema de coordenadas na base da segunda haste
-    glRotatef(theta2, 0, 0, 1); // Rotaciona a base
-    DesenhaRect(paddleHeight, paddleWidth, 1.0, 1.0, 0.0); // Desenha a haste em si (retângulo)
-
-    // Desenhar a terceira haste
-    glTranslatef(0, paddleHeight, 0); // Colocando o sistema de coordenadas na base da terceira haste
-    glRotatef(theta3, 0, 0, 1); // Rotaciona a base
-    DesenhaRect(paddleHeight, paddleWidth, 0.0, 1.0, 0.0); // Desenha a haste em si (retângulo)
-
+        // Desenhar a terceira haste
+        glTranslatef(0, paddleHeight, 0); // Colocando o sistema de coordenadas na base da terceira haste
+        glRotatef(theta3, 0, 0, 1); // Rotaciona a base
+        DesenhaRect(paddleHeight, paddleWidth, 0.0, 1.0, 0.0); // Desenha a haste em si (retângulo)
     glPopMatrix();
 }
 
 void Robo::DesenhaRobo(GLfloat x, GLfloat y, GLfloat thetaWheel, GLfloat theta1, GLfloat theta2, GLfloat theta3) {
     glPushMatrix();
+        // Desenha a base (corpo)
+        glTranslatef(x, y, 0);    
+        DesenhaRect(baseHeight, baseWidth, 1.0, 0.0, 0.0);
 
-    // Desenha a base (corpo)
-    glTranslatef(x, y, 0);    
-    DesenhaRect(baseHeight, baseWidth, 1.0, 0.0, 0.0);
+        // Desenha o braço
+        DesenhaBraco(0, baseHeight, theta1, theta2, theta3);
 
-    // Desenha o braço
-    DesenhaBraco(0, baseHeight, theta1, theta2, theta3);
-
-    // Desenha as rodas
-    DesenhaRoda(-baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
-    DesenhaRoda(baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
-
-
+        // Desenha as rodas
+        DesenhaRoda(-baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
+        DesenhaRoda(baseWidth/2, 0, thetaWheel, 1.0, 1.0, 1.0);
     glPopMatrix();
 }
 
@@ -94,7 +87,7 @@ void Robo::MoveEmX(GLfloat dx) {
     gThetaWheel += -(dx / radiusWheel) * 180 / M_PI;
 }
 
-//Funcao auxiliar de rotacao
+// Funcao auxiliar de rotacao
 void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yOut){
 
 }

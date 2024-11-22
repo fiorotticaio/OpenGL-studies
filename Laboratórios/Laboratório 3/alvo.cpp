@@ -16,21 +16,18 @@ void Alvo::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B) {
 
 void Alvo::DesenhaAlvo(GLfloat x, GLfloat y) {
     glPushMatrix();
-    
-    glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro do alvo
-    
-    switch (gColor) {
-        case 0:
-            DesenhaCirc(radiusAlvo, 1.0, 0.0, 0.0);
-            break;
-        case 1:
-            DesenhaCirc(radiusAlvo, 0.0, 1.0, 0.0);
-            break;
-        case 2:
-            DesenhaCirc(radiusAlvo, 0.0, 0.0, 1.0);
-            break;
-    }
-
+        glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro do alvo
+        switch (gColor) {
+            case 0:
+                DesenhaCirc(radiusAlvo, 1.0, 0.0, 0.0);
+                break;
+            case 1:
+                DesenhaCirc(radiusAlvo, 0.0, 1.0, 0.0);
+                break;
+            case 2:
+                DesenhaCirc(radiusAlvo, 0.0, 0.0, 1.0);
+                break;
+        }
     glPopMatrix();
 }
 

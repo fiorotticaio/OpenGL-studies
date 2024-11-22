@@ -18,10 +18,8 @@ void Tiro::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B) {
 
 void Tiro::DesenhaTiro(GLfloat x, GLfloat y) {
     glPushMatrix();
-    
-    glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro do tiro
-    DesenhaCirc(radiusTiro, 1.0, 1.0, 1.0); // Desenha o tiro
-    
+        glTranslatef(x, y, 0); // Colocando o sistema de coordenadas no centro do tiro
+        DesenhaCirc(radiusTiro, 1.0, 1.0, 1.0); // Desenha o tiro
     glPopMatrix();
 }
 
