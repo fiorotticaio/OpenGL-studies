@@ -29,6 +29,25 @@ Robo robo; // Um rodo
 Tiro * tiro = NULL; // Um tiro por vez
 Alvo alvo(0, 200); // Um alvo por vez
 
+int atingido = 0;
+static char str[1000];
+void * font = GLUT_BITMAP_9_BY_15;
+
+void ImprimePlacar(GLfloat x, GLfloat y) {
+    glColor3f(1.0, 1.0, 1.0);
+    //Cria a string a ser impressa
+    char *tmpStr;
+    sprintf(str, "Atingido: %d", atingido );
+    //Define a posicao onde vai comecar a imprimir
+    glRasterPos2f(x, y);
+    //Imprime um caractere por vez
+    tmpStr = str;
+    while( *tmpStr ) {
+        glutBitmapCharacter(font, *tmpStr);
+        tmpStr++;
+    }
+}
+
 void renderScene(void) {
     // Clear the screen.
     glClear(GL_COLOR_BUFFER_BIT);
