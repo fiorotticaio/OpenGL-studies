@@ -88,16 +88,91 @@ void Robo::MoveEmX(GLfloat dx) {
 }
 
 // Funcao auxiliar de rotacao
-void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yOut){
+void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yOut) {
+    // Matriz de rotacao
+    GLfloat rotMatrix[3][3] = {
+        {cos(angle), -sin(angle), 0},
+        {sin(angle), cos(angle) , 0},
+        {0         , 0          , 1},
+    };
 
+    // Vetor de entrada
+    GLfloat inVector[3] = {x, y, 1};
+
+    // Vetor de saida
+    GLfloat outVector[3] = {0, 0, 0};
+
+    // Multiplicacao de matriz por vetor
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            outVector[i] += rotMatrix[i][j] * inVector[j];
+        }
+    }
+
+    // Atribuindo valores de saida
+    xOut = outVector[0];
+    yOut = outVector[1];
+    printf("xOut = %f, yOut = %f\n", xOut, yOut);
+}
+
+// Função auxiliar de translação
+void TranslatePoint(GLfloat x, GLfloat y, GLfloat dx, GLfloat dy, GLfloat &xOut, GLfloat &yOut) {
+    // Matriz de translação
+    GLfloat transMatrix[3][3] = {
+        {1, 0, dx},
+        {0, 1, dy},
+        {0, 0, 1},
+    };
+
+    // Vetor de entrada
+    GLfloat inVector[3] = {x, y, 1};
+
+    // Vetor de saida
+    GLfloat outVector[3] = {0, 0, 0};
+
+    // Multiplicacao de matriz por vetor
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            outVector[i] += transMatrix[i][j] * inVector[j];
+        }
+    }
+
+    // Atribuindo valores de saida
+    xOut = outVector[0];
+    yOut = outVector[1];
+    printf("xOut = %f, yOut = %f\n", xOut, yOut);
+}
+
+// Função auxiliar de escala
+void ScalePoint(GLfloat x, GLfloat y, GLfloat sx, GLfloat sy, GLfloat &xOut, GLfloat &yOut) {
+    // Matriz de escala
+    GLfloat scaleMatrix[3][3] = {
+        {sx, 0 , 0},
+        {0 , sy, 0},
+        {0 , 0 , 1},
+    };
+
+    // Vetor de entrada
+    GLfloat inVector[3] = {x, y, 1};
+
+    // Vetor de saida
+    GLfloat outVector[3] = {0, 0, 0};
+
+    // Multiplicacao de matriz por vetor
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            outVector[i] += scaleMatrix[i][j] * inVector[j];
+        }
+    }
+
+    // Atribuindo valores de saida
+    xOut = outVector[0];
+    yOut = outVector[1];
+    printf("xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 Tiro* Robo::Atira() {
-    // Calcular a posição e direção do tiro em relação a ponta e direção da última haste
-    GLfloat x = gX + baseWidth/2 + paddleWidth/2;
-    GLfloat y = gY + baseHeight + 3*paddleHeight;
-    GLfloat direction = gTheta1 + gTheta2 + gTheta3;
-    Tiro * tiro = new Tiro(x, y, direction);
-    tiro->Desenha();
-    return tiro;
+    return NULL;
 }
+
+

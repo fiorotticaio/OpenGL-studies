@@ -3,6 +3,7 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include "tiro.h"
+#include <cstdio>
 // Dimensions
 #define paddleHeight 80
 #define paddleWidth 10
@@ -40,8 +41,7 @@ public:
         gThetaWheel = 0; 
     };
     void Desenha(){
-        DesenhaRobo(gX, gY, gThetaWheel, gTheta1, 
-                gTheta2, gTheta3);
+        DesenhaRobo(gX, gY, gThetaWheel, gTheta1, gTheta2, gTheta3);        
     };
     void RodaBraco1(GLfloat inc);
     void RodaBraco2(GLfloat inc);

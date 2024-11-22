@@ -29,7 +29,6 @@ Robo robo; // Um rodo
 Tiro * tiro = NULL; // Um tiro por vez
 Alvo alvo(0, 200); // Um alvo por vez
 
-
 void renderScene(void) {
     // Clear the screen.
     glClear(GL_COLOR_BUFFER_BIT);
@@ -103,8 +102,6 @@ void ResetKeyStatus() {
 }
 
 void init(void) {
-    robo.Desenha();
-
     ResetKeyStatus();
     // The color the windows will redraw. Its done to erase the previous frame.
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black, no opacity(alpha).
