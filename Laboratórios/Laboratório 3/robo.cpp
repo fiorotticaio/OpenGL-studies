@@ -112,7 +112,7 @@ void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yO
     // Atribuindo valores de saida
     xOut = outVector[0];
     yOut = outVector[1];
-    printf("xOut = %f, yOut = %f\n", xOut, yOut);
+    printf("Rotate: xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 // Função auxiliar de translação
@@ -140,7 +140,7 @@ void TranslatePoint(GLfloat x, GLfloat y, GLfloat dx, GLfloat dy, GLfloat &xOut,
     // Atribuindo valores de saida
     xOut = outVector[0];
     yOut = outVector[1];
-    printf("xOut = %f, yOut = %f\n", xOut, yOut);
+    printf("Translate: xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 // Função auxiliar de escala
@@ -168,11 +168,82 @@ void ScalePoint(GLfloat x, GLfloat y, GLfloat sx, GLfloat sy, GLfloat &xOut, GLf
     // Atribuindo valores de saida
     xOut = outVector[0];
     yOut = outVector[1];
-    printf("xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 Tiro* Robo::Atira() {
-    return NULL;
+        // Captura a posição final do braço fazendo as operações
+        // na ordem inversa com as funções auxiliares
+        GLfloat xBaseUltimoBraco = 0.0, yBaseUltimoBraco = 0.0;
+        GLfloat xTopoUltimoBraco = 0.0, yTopoUltimoBraco = 0.0;
+        GLfloat thetaUltimoBraco = 0.0;
+
+    glPushMatrix();
+        GLfloat x = 0.0, y = 0.0;
+        GLfloat xOut = 0.0, yOut = 0.0;
+
+        TranslatePoint(x, y, 0, paddleHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        RotatePoint(x, y, gTheta3 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, paddleHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        RotatePoint(x, y, gTheta2 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, paddleHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        RotatePoint(x, y, gTheta1 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, baseHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, gX, gY, xOut, yOut);
+        x = xOut; y = yOut;
+
+        xTopoUltimoBraco = x;
+        yTopoUltimoBraco = y;
+
+
+        // Pegando a posição da base
+        x = 0.0, y = 0.0;
+        xOut = 0.0, yOut = 0.0;
+
+        RotatePoint(x, y, gTheta3 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, paddleHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        RotatePoint(x, y, gTheta2 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, paddleHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        RotatePoint(x, y, gTheta1 * 3.14 / 180, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, 0, baseHeight, xOut, yOut);
+        x = xOut; y = yOut;
+
+        TranslatePoint(x, y, gX, gY, xOut, yOut);
+        x = xOut; y = yOut;
+
+        xBaseUltimoBraco = x;
+        yBaseUltimoBraco = y;
+
+
+        GLfloat dx = xTopoUltimoBraco - xBaseUltimoBraco;
+        GLfloat dy = yTopoUltimoBraco - yBaseUltimoBraco;
+
+        thetaUltimoBraco = atan2(dy, dx);
+
+    glPopMatrix();
+
+    return new Tiro(xTopoUltimoBraco, yTopoUltimoBraco, thetaUltimoBraco);
 }
-
-
