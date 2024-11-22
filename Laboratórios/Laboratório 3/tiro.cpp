@@ -23,9 +23,9 @@ void Tiro::DesenhaTiro(GLfloat x, GLfloat y) {
     glPopMatrix();
 }
 
-void Tiro::Move() {
-    gX += gVel * cos(gDirectionAng);
-    gY += gVel * sin(gDirectionAng);
+void Tiro::Move(GLdouble timeDiference) {
+    gX += gVel * timeDiference * cos(gDirectionAng);
+    gY += gVel * timeDiference * sin(gDirectionAng);
 }
 
 bool Tiro::Valido() {

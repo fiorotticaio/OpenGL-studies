@@ -27,7 +27,7 @@ public:
     void Desenha(){ 
         DesenhaTiro(gX, gY);
     };
-    void Move();
+    void Move(GLdouble timeDiference);
     bool Valido();
     void GetPos(GLfloat &xOut, GLfloat &yOut){
         xOut = gX;

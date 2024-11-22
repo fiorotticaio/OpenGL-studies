@@ -39,6 +39,8 @@ void renderScene(void) {
     
     alvo.Desenha();
 
+    ImprimePlacar(0, 0);
+
     glutSwapBuffers(); // Desenha the new frame of the game.
 }
 
@@ -102,6 +104,17 @@ void ResetKeyStatus() {
 }
 
 void init(void) {
+    // for (int i = 0; i < 90000000; i++);
+
+    static GLdouble previousTime = glutGet(GLUT_ELAPSED_TIME);
+    GLdouble currentTime, timeDiference;
+    //Pega o tempo que passou do inicio da aplicacao
+    currentTime = glutGet(GLUT_ELAPSED_TIME);
+    // Calcula o tempo decorrido desde de a ultima frame.
+    timeDiference = currentTime - previousTime;
+    //Atualiza o tempo do ultimo frame ocorrido
+    previousTime = currentTime;
+
     ResetKeyStatus();
     // The color the windows will redraw. Its done to erase the previous frame.
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black, no opacity(alpha).
@@ -153,11 +166,12 @@ void idle(void) {
     // Trata o tiro (soh permite um tiro por vez)
     // Poderia usar uma lista para tratar varios tiros
     if (tiro) {
-        tiro->Move();
+        tiro->Move(timeDiference);
 
         // Trata colisao
         if (alvo.Atingido(tiro)) {
             alvo.Recria(rand()%500 - 250, 200);
+            atingido++;
         }
 
         if (!tiro->Valido()) { 
