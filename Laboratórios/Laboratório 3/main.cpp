@@ -58,7 +58,7 @@ void renderScene(void) {
     
     alvo.Desenha();
 
-    ImprimePlacar(0, 0);
+    ImprimePlacar(-210, -210);
 
     glutSwapBuffers(); // Desenha the new frame of the game.
 }
@@ -123,17 +123,6 @@ void ResetKeyStatus() {
 }
 
 void init(void) {
-    // for (int i = 0; i < 90000000; i++);
-
-    static GLdouble previousTime = glutGet(GLUT_ELAPSED_TIME);
-    GLdouble currentTime, timeDiference;
-    //Pega o tempo que passou do inicio da aplicacao
-    currentTime = glutGet(GLUT_ELAPSED_TIME);
-    // Calcula o tempo decorrido desde de a ultima frame.
-    timeDiference = currentTime - previousTime;
-    //Atualiza o tempo do ultimo frame ocorrido
-    previousTime = currentTime;
-
     ResetKeyStatus();
     // The color the windows will redraw. Its done to erase the previous frame.
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Black, no opacity(alpha).
@@ -150,6 +139,17 @@ void init(void) {
 }
 
 void idle(void) {
+    // for (int i = 0; i < 90000000; i++);
+
+    static GLdouble previousTime = glutGet(GLUT_ELAPSED_TIME);
+    GLdouble currentTime, timeDiference;
+    //Pega o tempo que passou do inicio da aplicacao
+    currentTime = glutGet(GLUT_ELAPSED_TIME);
+    // Calcula o tempo decorrido desde de a ultima frame.
+    timeDiference = currentTime - previousTime;
+    //Atualiza o tempo do ultimo frame ocorrido
+    previousTime = currentTime;
+
     double inc = INC_KEYIDLE;
 
     // Treat keyPress
