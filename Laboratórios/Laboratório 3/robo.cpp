@@ -112,7 +112,6 @@ void RotatePoint(GLfloat x, GLfloat y, GLfloat angle, GLfloat &xOut, GLfloat &yO
     // Atribuindo valores de saida
     xOut = outVector[0];
     yOut = outVector[1];
-    printf("Rotate: xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 // Função auxiliar de translação
@@ -140,7 +139,6 @@ void TranslatePoint(GLfloat x, GLfloat y, GLfloat dx, GLfloat dy, GLfloat &xOut,
     // Atribuindo valores de saida
     xOut = outVector[0];
     yOut = outVector[1];
-    printf("Translate: xOut = %f, yOut = %f\n", xOut, yOut);
 }
 
 // Função auxiliar de escala
@@ -171,13 +169,14 @@ void ScalePoint(GLfloat x, GLfloat y, GLfloat sx, GLfloat sy, GLfloat &xOut, GLf
 }
 
 Tiro* Robo::Atira() {
-        // Captura a posição final do braço fazendo as operações
-        // na ordem inversa com as funções auxiliares
-        GLfloat xBaseUltimoBraco = 0.0, yBaseUltimoBraco = 0.0;
-        GLfloat xTopoUltimoBraco = 0.0, yTopoUltimoBraco = 0.0;
-        GLfloat thetaUltimoBraco = 0.0;
+    // Captura a posição final do braço fazendo as operações
+    // na ordem inversa com as funções auxiliares
+    GLfloat xBaseUltimoBraco = 0.0, yBaseUltimoBraco = 0.0;
+    GLfloat xTopoUltimoBraco = 0.0, yTopoUltimoBraco = 0.0;
+    GLfloat thetaUltimoBraco = 0.0;
 
     glPushMatrix();
+        // Pegando a posição do topo 
         GLfloat x = 0.0, y = 0.0;
         GLfloat xOut = 0.0, yOut = 0.0;
 
@@ -242,7 +241,6 @@ Tiro* Robo::Atira() {
         GLfloat dy = yTopoUltimoBraco - yBaseUltimoBraco;
 
         thetaUltimoBraco = atan2(dy, dx);
-
     glPopMatrix();
 
     return new Tiro(xTopoUltimoBraco, yTopoUltimoBraco, thetaUltimoBraco);

@@ -8,7 +8,7 @@
 #include "alvo.h"
 
 #define INC_KEY 1
-#define INC_KEYIDLE 0.1
+#define INC_KEYIDLE 1
 
 //Key status
 int keyStatus[256];
@@ -27,6 +27,8 @@ int animate = 0;
 // Componentes do mundo virtual sendo modelado
 Robo robo; // Um rodo
 Tiro * tiro = NULL; // Um tiro por vez
+// Tiro[3] tiros = NULL; // Máximo de 3 tiros
+
 Alvo alvo(0, 200); // Um alvo por vez
 
 int atingido = 0;
@@ -78,27 +80,27 @@ void keyPress(unsigned char key, int x, int y) {
              break;
         case 'f':
         case 'F':
-             robo.RodaBraco1(-INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('f')] = 1; // Without keyStatus trick
              break;
         case 'r':
         case 'R':
-             robo.RodaBraco1(+INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('r')] = 1; // Without keyStatus trick
              break;
         case 'g':
         case 'G':
-             robo.RodaBraco2(-INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('g')] = 1; // Without keyStatus trick
              break;
         case 't':
         case 'T':
-             robo.RodaBraco2(+INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('t')] = 1; // Without keyStatus trick
              break;
         case 'h':
         case 'H':
-             robo.RodaBraco3(-INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('h')] = 1; // Without keyStatus trick
              break;
         case 'y':
         case 'Y':
-             robo.RodaBraco3(+INC_KEY); // Without keyStatus trick
+             keyStatus[(int)('y')] = 1; // Without keyStatus trick
              break;
         case ' ':
              if (!tiro)
