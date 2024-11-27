@@ -236,20 +236,19 @@ Tiro* Robo::Atira() {
         xBaseUltimoBraco = x;
         yBaseUltimoBraco = y;
 
-        GLfloat vetorBase[2] = {xBaseUltimoBraco, yBaseUltimoBraco};
-        GLfloat vetorTopo[2] = {xTopoUltimoBraco, yTopoUltimoBraco}; 
+        // GLfloat vetorBase[2] = {xBaseUltimoBraco, yBaseUltimoBraco};
+        // GLfloat vetorTopo[2] = {xTopoUltimoBraco, yTopoUltimoBraco}; 
 
-        // Achar a direção do tiro com base nos vetores (sem usar ângulo)
-        GLfloat xVetorRes = vetorTopo[0] - vetorBase[0];
-        GLfloat yVetorRes = vetorTopo[1] - vetorBase[1];
+        // // Achar a direção do tiro com base nos vetores (sem usar ângulo)
+        // GLfloat xVetorRes = vetorTopo[0] - vetorBase[0];
+        // GLfloat yVetorRes = vetorTopo[1] - vetorBase[1];
 
-        // Achando a direção (vetor)
-        GLfloat norma = sqrt(xVetorRes*xVetorRes + yVetorRes*yVetorRes);
-        xVetorRes /= norma;
-        yVetorRes /= norma;
+        // // Achando a direção (vetor)
+        // GLfloat norma = sqrt(xVetorRes*xVetorRes + yVetorRes*yVetorRes);
+        // xVetorRes /= norma;
+        // yVetorRes /= norma;
 
-        GLfloat direcaoTiro[2] = {xVetorRes, yVetorRes}; // ???
-
+        // GLfloat direcaoTiro[2] = {xVetorRes, yVetorRes}; // ???
 
         GLfloat dx = xTopoUltimoBraco - xBaseUltimoBraco;
         GLfloat dy = yTopoUltimoBraco - yBaseUltimoBraco;

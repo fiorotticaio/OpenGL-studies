@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include "robo.h"
 #include "alvo.h"
+#include <vector>
 
 #define INC_KEY 1
 #define INC_KEYIDLE 0.3
@@ -26,8 +27,8 @@ int animate = 0;
 
 // Componentes do mundo virtual sendo modelado
 Robo robo; // Um rodo
-Tiro * tiro = NULL; // Um tiro por vez
-// Tiro[3] tiros = NULL; // Máximo de 3 tiros
+// Tiro * tiro = NULL; // Um tiro por vez
+std::vector<Tiro*> tiros; // Vetor de ponteiros para tiros
 
 Alvo alvo(0, 200); // Um alvo por vez
 
@@ -56,7 +57,9 @@ void renderScene(void) {
 
     robo.Desenha();
     
-    if (tiro) tiro->Desenha();
+    for (Tiro* tiro : tiros) {
+        if (tiro) tiro->Desenha();
+    }
     
     alvo.Desenha();
 
@@ -103,9 +106,8 @@ void keyPress(unsigned char key, int x, int y) {
              keyStatus[(int)('y')] = 1; // Without keyStatus trick
              break;
         case ' ':
-             if (!tiro)
-                tiro = robo.Atira();
-             break;
+            keyStatus[(int)(' ')] = 1; // Without keyStatus trick
+            break;
         case 27 :
              exit(0);
     }
@@ -180,26 +182,46 @@ void idle(void) {
         robo.RodaBraco3(inc);
     }
     if (keyStatus[(int)(' ')]) {
-        if (!tiro)
-            tiro = robo.Atira();
+        tiros.push_back(robo.Atira());
+    }
+
+    // Trata os tiros (permitindo múltiplos tiros)
+    for (size_t i = 0; i < tiros.size(); ++i) {
+        Tiro* tiro = tiros[i];
+        if (tiro) {
+            tiro->Move(timeDiference);
+
+            // Verifica se o tiro atingiu o alvo
+            if (alvo.Atingido(tiro)) {
+                alvo.Recria(rand() % 500 - 250, 200);
+                atingido++;
+            }
+
+            // Verifica se o tiro ainda é válido
+            if (!tiro->Valido()) {
+                delete tiro;
+                tiros.erase(tiros.begin() + i);
+                i--; // Ajusta o índice após a remoção
+            }
+        }
     }
     
     // Trata o tiro (soh permite um tiro por vez)
     // Poderia usar uma lista para tratar varios tiros
-    if (tiro) {
-        tiro->Move(timeDiference);
+    // if (tiro) {
+    //     tiro->Move(timeDiference);
 
-        // Trata colisao
-        if (alvo.Atingido(tiro)) {
-            alvo.Recria(rand()%500 - 250, 200);
-            atingido++;
-        }
+    //     // Trata colisao
+    //     if (alvo.Atingido(tiro)) {
+    //         alvo.Recria(rand()%500 - 250, 200);
+    //         atingido++;
+    //     }
 
-        if (!tiro->Valido()) { 
-            delete tiro;
-            tiro = NULL;
-        }
-    }
+    //     if (!tiro->Valido()) { 
+    //         delete tiro;
+    //         tiro = NULL;
+    //     }
+    // }
     
     
     // Control animation
