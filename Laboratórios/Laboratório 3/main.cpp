@@ -8,7 +8,7 @@
 #include "alvo.h"
 
 #define INC_KEY 1
-#define INC_KEYIDLE 1
+#define INC_KEYIDLE 0.3
 
 //Key status
 int keyStatus[256];
