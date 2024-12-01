@@ -1,6 +1,7 @@
 #include "robo.h"
 #include <math.h>
 
+
 void Robo::DesenhaRect(GLint height, GLint width, GLfloat R, GLfloat G, GLfloat B) {
     glColor3f(R, G, B);
 
@@ -208,6 +209,7 @@ Tiro* Robo::Atira() {
         yTopoUltimoBraco = y;
 
 
+
         // Pegando a posição da base
         x = 0.0, y = 0.0;
         xOut = 0.0, yOut = 0.0;
@@ -236,19 +238,19 @@ Tiro* Robo::Atira() {
         xBaseUltimoBraco = x;
         yBaseUltimoBraco = y;
 
-        // GLfloat vetorBase[2] = {xBaseUltimoBraco, yBaseUltimoBraco};
-        // GLfloat vetorTopo[2] = {xTopoUltimoBraco, yTopoUltimoBraco}; 
+        GLfloat vetorBase[2] = {xBaseUltimoBraco, yBaseUltimoBraco};
+        GLfloat vetorTopo[2] = {xTopoUltimoBraco, yTopoUltimoBraco}; 
 
-        // // Achar a direção do tiro com base nos vetores (sem usar ângulo)
-        // GLfloat xVetorRes = vetorTopo[0] - vetorBase[0];
-        // GLfloat yVetorRes = vetorTopo[1] - vetorBase[1];
+        // Achar a direção do tiro com base nos vetores (sem usar ângulo)
+        GLfloat xVetorRes = vetorTopo[0] - vetorBase[0];
+        GLfloat yVetorRes = vetorTopo[1] - vetorBase[1];
 
-        // // Achando a direção (vetor)
-        // GLfloat norma = sqrt(xVetorRes*xVetorRes + yVetorRes*yVetorRes);
-        // xVetorRes /= norma;
-        // yVetorRes /= norma;
+        // Achando a direção (vetor)
+        GLfloat norma = sqrt(xVetorRes*xVetorRes + yVetorRes*yVetorRes);
+        xVetorRes /= norma;
+        yVetorRes /= norma;
 
-        // GLfloat direcaoTiro[2] = {xVetorRes, yVetorRes}; // ???
+        GLfloat direcaoTiro[2] = {xVetorRes, yVetorRes};
 
         GLfloat dx = xTopoUltimoBraco - xBaseUltimoBraco;
         GLfloat dy = yTopoUltimoBraco - yBaseUltimoBraco;
@@ -256,5 +258,5 @@ Tiro* Robo::Atira() {
         thetaUltimoBraco = atan2(dy, dx);
     glPopMatrix();
 
-    return new Tiro(xTopoUltimoBraco, yTopoUltimoBraco, thetaUltimoBraco);
+    return new Tiro(xTopoUltimoBraco, yTopoUltimoBraco, thetaUltimoBraco, direcaoTiro);
 }

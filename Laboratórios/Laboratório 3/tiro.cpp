@@ -1,6 +1,6 @@
 #include "tiro.h"
 #include <math.h>
-#define DISTANCIA_MAX 350
+#define DISTANCIA_MAX 500
 
 void Tiro::DesenhaCirc(GLint radius, GLfloat R, GLfloat G, GLfloat B) {
     // Similar ao DesenhaCirc de Robo, porém com polígonos fechados ao invés de pontos
@@ -24,8 +24,11 @@ void Tiro::DesenhaTiro(GLfloat x, GLfloat y) {
 }
 
 void Tiro::Move(GLdouble timeDiference) {
-    gX += gVel * timeDiference * cos(gDirectionAng);
-    gY += gVel * timeDiference * sin(gDirectionAng);
+    // gX += gVel * timeDiference * cos(gDirectionAng);
+    // gY += gVel * timeDiference * sin(gDirectionAng);
+
+    gX += gVel * direcaoTiro[0] * timeDiference;
+    gY += gVel * direcaoTiro[1] * timeDiference;
 }
 
 bool Tiro::Valido() {

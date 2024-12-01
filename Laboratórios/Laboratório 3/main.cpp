@@ -106,7 +106,8 @@ void keyPress(unsigned char key, int x, int y) {
              keyStatus[(int)('y')] = 1; // Without keyStatus trick
              break;
         case ' ':
-            keyStatus[(int)(' ')] = 1; // Without keyStatus trick
+            // keyStatus[(int)(' ')] = 1; // Without keyStatus trick
+            tiros.push_back(robo.Atira());
             break;
         case 27 :
              exit(0);
@@ -181,9 +182,9 @@ void idle(void) {
     if (keyStatus[(int)('y')]) {
         robo.RodaBraco3(inc);
     }
-    if (keyStatus[(int)(' ')]) {
-        tiros.push_back(robo.Atira());
-    }
+    // if (keyStatus[(int)(' ')]) {
+        // tiros.push_back(robo.Atira());
+    // }
 
     // Trata os tiros (permitindo múltiplos tiros)
     for (size_t i = 0; i < tiros.size(); ++i) {
