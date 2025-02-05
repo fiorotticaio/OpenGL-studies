@@ -37,6 +37,12 @@ void init ()
     
     //Carrega as meshes dos arquivos
     soldado.loadMesh("Blender/untitledc1.obj");
+
+    // Print soldado.vertsPos
+    for (int i = 0; i < soldado.vertsPos.size(); i++){
+        cout << "soldado.vertsPos[" << i << "]: " << soldado.vertsPos[i].x << " " << soldado.vertsPos[i].y << " " << soldado.vertsPos[i].z << endl;
+    }
+
     soldado_transf.loadMesh("Blender/untitledc2-transf.obj");
     arma.loadMesh("Blender/armanova1.obj");
 }
@@ -89,7 +95,31 @@ void ChangeCoordSys(
                         0,0,1,0,
                         0,0,0,1};
 
-	//COLOQUE SEU CODIGO AQUI
+	// Calcula o vetor Y (direção da arma, de B para A)
+    y[0] = ax - bx;
+    y[1] = ay - by;
+    y[2] = az - bz;
+    normalize(y);
+
+    // Define o vetor Z como o vetor UP fornecido
+    z[0] = upx;
+    z[1] = upy;
+    z[2] = upz;
+    normalize(z);
+
+    // Calcula o vetor X como o produto vetorial de Y e Z
+    cross(y, z, x);
+    normalize(x);
+
+    // Recalcula Z como o produto vetorial de X e Y para garantir ortogonalidade
+    cross(x, y, z);
+    normalize(z);
+
+    // Preenche a matriz de transformação
+    m[0][0] = x[0]; m[1][0] = x[1]; m[2][0] = x[2];
+    m[0][1] = y[0]; m[1][1] = y[1]; m[2][1] = y[2];
+    m[0][2] = z[0]; m[1][2] = z[1]; m[2][2] = z[2];
+    m[3][0] = bx;   m[3][1] = by;   m[3][2] = bz;
     
     glMultMatrixf(&m[0][0]);
 }
@@ -138,9 +168,14 @@ void DrawAxes(double size)
 
 //ALTERE AQUI - SEU CODIGO AQUI
 //Usar meshlab para obter os pontos abaixo
-int pontoArmaAponta = 0;
-int pontoPosicaoArma = 0;
-int up[3] = {0, 0, 0};
+int pontoArmaAponta = 1454;
+int pontoPosicaoArma = 3818;
+
+// up é o vetor que indica pra onde a arma aponta, calculado a partir dos pontos acima
+float up[3] = {soldado.vertsPos[pontoArmaAponta].x - soldado.vertsPos[pontoPosicaoArma].x,
+               soldado.vertsPos[pontoArmaAponta].y - soldado.vertsPos[pontoPosicaoArma].y,
+               soldado.vertsPos[pontoArmaAponta].z - soldado.vertsPos[pontoPosicaoArma].z};
+
 void desenhaJogador(){
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
@@ -190,8 +225,35 @@ void MygluLookAt(
                         0,0,1,0,
                         0,0,0,1};
 
-	//COLOQUE SEU CODIGO AQUI
-
+    // Calcula o vetor forward (direção da câmera)
+    forward[0] = centerx - eyex;
+    forward[1] = centery - eyey;
+    forward[2] = centerz - eyez;
+    normalize(forward);
+    
+    // Ajusta o vetor UP
+    up[0] = upx;
+    up[1] = upy;
+    up[2] = upz;
+    
+    // Calcula o vetor lateral (right) usando o produto vetorial up x forward
+    cross(up, forward, side);
+    normalize(side);
+    
+    // Recalcula o vetor UP para garantir ortogonalidade
+    cross(forward, side, up);
+    
+    // Monta a matriz de rotação da câmera
+    m[0][0] = side[0]; m[0][1] = side[1]; m[0][2] = side[2]; m[0][3] = 0.0;
+    m[1][0] = up[0];   m[1][1] = up[1];   m[1][2] = up[2];   m[1][3] = 0.0;
+    m[2][0] = -forward[0]; m[2][1] = -forward[1]; m[2][2] = -forward[2]; m[2][3] = 0.0;
+    m[3][0] = 0.0;      m[3][1] = 0.0;      m[3][2] = 0.0;      m[3][3] = 1.0;
+    
+    // Aplica a matriz de rotação
+    glMultMatrixf(&m[0][0]);
+    
+    // Aplica a translação para mover a câmera para a posição correta
+    glTranslatef(-eyex, -eyey, -eyez);
 }
 
 void display(void)
@@ -211,10 +273,10 @@ void display(void)
                     0, 0, 0,
                     0, 1, 0);
     } else{
-        //Limpa a cor com azulado
+        // Limpa a cor com azulado
         glClearColor (1.0, 0.30, 0.30, 0.0);
         glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);        
-        MygluLookAt(  zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
+        MygluLookAt(zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
                     zoom*                         sin((camXYAngle*M_PI/180)),
                     zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
                     0, 0, 0,
