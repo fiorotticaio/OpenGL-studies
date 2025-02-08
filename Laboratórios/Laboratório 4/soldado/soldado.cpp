@@ -39,9 +39,9 @@ void init ()
     soldado.loadMesh("Blender/untitledc1.obj");
 
     // Print soldado.vertsPos
-    for (int i = 0; i < soldado.vertsPos.size(); i++){
-        cout << "soldado.vertsPos[" << i << "]: " << soldado.vertsPos[i].x << " " << soldado.vertsPos[i].y << " " << soldado.vertsPos[i].z << endl;
-    }
+    // for (int i = 0; i < soldado.vertsPos.size(); i++){
+    //     cout << "soldado.vertsPos[" << i << "]: " << soldado.vertsPos[i].x << " " << soldado.vertsPos[i].y << " " << soldado.vertsPos[i].z << endl;
+    // }
 
     soldado_transf.loadMesh("Blender/untitledc2-transf.obj");
     arma.loadMesh("Blender/armanova1.obj");
@@ -96,9 +96,9 @@ void ChangeCoordSys(
                         0,0,0,1};
 
 	// Calcula o vetor Y (direção da arma, de B para A)
-    y[0] = ax - bx;
-    y[1] = ay - by;
-    y[2] = az - bz;
+    y[0] = bx - ax;
+    y[1] = by - ay;
+    y[2] = bz - az;
     normalize(y);
 
     // Define o vetor Z como o vetor UP fornecido
@@ -107,13 +107,9 @@ void ChangeCoordSys(
     z[2] = upz;
     normalize(z);
 
-    // Calcula o vetor X como o produto vetorial de Y e Z
-    cross(y, z, x);
+    // Calcula o vetor X como o produto vetorial de z e y
+    cross(z, y, x);
     normalize(x);
-
-    // Recalcula Z como o produto vetorial de X e Y para garantir ortogonalidade
-    cross(x, y, z);
-    normalize(z);
 
     // Preenche a matriz de transformação
     m[0][0] = x[0]; m[1][0] = x[1]; m[2][0] = x[2];
@@ -171,10 +167,9 @@ void DrawAxes(double size)
 int pontoArmaAponta = 1454;
 int pontoPosicaoArma = 3818;
 
-// up é o vetor que indica pra onde a arma aponta, calculado a partir dos pontos acima
-float up[3] = {soldado.vertsPos[pontoArmaAponta].x - soldado.vertsPos[pontoPosicaoArma].x,
-               soldado.vertsPos[pontoArmaAponta].y - soldado.vertsPos[pontoPosicaoArma].y,
-               soldado.vertsPos[pontoArmaAponta].z - soldado.vertsPos[pontoPosicaoArma].z};
+//vetor up que indica como a mira está orientada
+float up[3] = {0,1,0};
+
 
 void desenhaJogador(){
     glMatrixMode(GL_MODELVIEW);
