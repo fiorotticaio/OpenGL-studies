@@ -214,40 +214,38 @@ void MygluLookAt(
         GLdouble upx, GLdouble upy, GLdouble upz)
 {
     float forward[3], side[3], up[3];
-    //column-major order
-    GLfloat m[4][4] = { 1,0,0,0,
-                        0,1,0,0,
-                        0,0,1,0,
-                        0,0,0,1};
 
     // Calcula o vetor forward (direção da câmera)
     forward[0] = centerx - eyex;
     forward[1] = centery - eyey;
     forward[2] = centerz - eyez;
-    normalize(forward);
+    normalize(forward); // Normaliza para evitar escalonamento inesperado
     
-    // Ajusta o vetor UP
+    // Define o vetor UP
     up[0] = upx;
     up[1] = upy;
     up[2] = upz;
-    
-    // Calcula o vetor lateral (right) usando o produto vetorial up x forward
-    cross(up, forward, side);
+    normalize(up); // Normaliza para evitar distorções
+
+    // Calcula o vetor lateral (right) usando o produto vetorial UP x FORWARD
+    cross(forward, up, side);
     normalize(side);
-    
-    // Recalcula o vetor UP para garantir ortogonalidade
-    cross(forward, side, up);
-    
-    // Monta a matriz de rotação da câmera
-    m[0][0] = side[0]; m[0][1] = side[1]; m[0][2] = side[2]; m[0][3] = 0.0;
-    m[1][0] = up[0];   m[1][1] = up[1];   m[1][2] = up[2];   m[1][3] = 0.0;
-    m[2][0] = -forward[0]; m[2][1] = -forward[1]; m[2][2] = -forward[2]; m[2][3] = 0.0;
-    m[3][0] = 0.0;      m[3][1] = 0.0;      m[3][2] = 0.0;      m[3][3] = 1.0;
-    
-    // Aplica a matriz de rotação
-    glMultMatrixf(&m[0][0]);
-    
-    // Aplica a translação para mover a câmera para a posição correta
+
+    // Recalcula o vetor UP para garantir ortogonalidade entre os vetores
+    cross(side, forward, up);
+
+    // Matriz de rotação (OpenGL armazena em ordem coluna-major!)
+    GLfloat m[16] = {
+        side[0],   up[0],   -forward[0],   0.0,
+        side[1],   up[1],   -forward[1],   0.0,
+        side[2],   up[2],   -forward[2],   0.0,
+        0.0,       0.0,      0.0,          1.0
+    };
+
+    // Aplica a matriz de rotação primeiro
+    glMultMatrixf(m);
+
+    // Aplica a translação depois
     glTranslatef(-eyex, -eyey, -eyez);
 }
 
@@ -270,7 +268,7 @@ void display(void)
     } else{
         // Limpa a cor com azulado
         glClearColor (1.0, 0.30, 0.30, 0.0);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);        
+        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         MygluLookAt(zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
                     zoom*                         sin((camXYAngle*M_PI/180)),
                     zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
