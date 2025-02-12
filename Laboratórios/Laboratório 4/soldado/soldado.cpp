@@ -90,32 +90,29 @@ void ChangeCoordSys(
         GLdouble upx, GLdouble upy, GLdouble upz)
 {
     float x[3], y[3], z[3];
-    GLfloat m[4][4] = { 1,0,0,0,
-                        0,1,0,0,
-                        0,0,1,0,
-                        0,0,0,1};
+    GLfloat m[4][4] = { 1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1 };
 
-	// Calcula o vetor Y (direção da arma, de B para A)
-    y[0] = bx - ax;
-    y[1] = by - ay;
-    y[2] = bz - az;
+    y[0] = ax - bx;
+    y[1] = ay - by;
+    y[2] = az - bz;
     normalize(y);
 
-    // Define o vetor Z como o vetor UP fornecido
     z[0] = upx;
     z[1] = upy;
     z[2] = upz;
     normalize(z);
 
-    // Calcula o vetor X como o produto vetorial de z e y
     cross(z, y, x);
     normalize(x);
 
     // Preenche a matriz de transformação
-    m[0][0] = x[0]; m[1][0] = x[1]; m[2][0] = x[2];
-    m[0][1] = y[0]; m[1][1] = y[1]; m[2][1] = y[2];
-    m[0][2] = z[0]; m[1][2] = z[1]; m[2][2] = z[2];
-    m[3][0] = bx;   m[3][1] = by;   m[3][2] = bz;
+    m[0][0] = x[0]; m[0][1] = x[1]; m[0][2] = x[2]; m[0][3] = 0;
+    m[1][0] = y[0]; m[1][1] = y[1]; m[1][2] = y[2]; m[1][3] = 0;
+    m[2][0] = z[0]; m[2][1] = z[1]; m[2][2] = z[2]; m[2][3] = 0;
+    m[3][0] = bx;   m[3][1] = by;   m[3][2] = bz; m[3][3] = 1;
     
     glMultMatrixf(&m[0][0]);
 }
@@ -164,8 +161,8 @@ void DrawAxes(double size)
 
 //ALTERE AQUI - SEU CODIGO AQUI
 //Usar meshlab para obter os pontos abaixo
-int pontoArmaAponta = 1454;
-int pontoPosicaoArma = 3818;
+int pontoArmaAponta = 4242;
+int pontoPosicaoArma = 2897;
 
 //vetor up que indica como a mira está orientada
 float up[3] = {0,1,0};
@@ -214,18 +211,20 @@ void MygluLookAt(
         GLdouble upx, GLdouble upy, GLdouble upz)
 {
     float forward[3], side[3], up[3];
+    GLfloat m[4][4] = { 1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1 };
 
-    // Calcula o vetor forward (direção da câmera)
     forward[0] = centerx - eyex;
     forward[1] = centery - eyey;
     forward[2] = centerz - eyez;
-    normalize(forward); // Normaliza para evitar escalonamento inesperado
+    normalize(forward);
     
-    // Define o vetor UP
     up[0] = upx;
     up[1] = upy;
     up[2] = upz;
-    normalize(up); // Normaliza para evitar distorções
+    normalize(up);
 
     // Calcula o vetor lateral (right) usando o produto vetorial UP x FORWARD
     cross(forward, up, side);
@@ -233,42 +232,46 @@ void MygluLookAt(
 
     // Recalcula o vetor UP para garantir ortogonalidade entre os vetores
     cross(side, forward, up);
+    normalize(up);
 
-    // Matriz de rotação (OpenGL armazena em ordem coluna-major!)
-    GLfloat m[16] = {
-        side[0],   up[0],   -forward[0],   0.0,
-        side[1],   up[1],   -forward[1],   0.0,
-        side[2],   up[2],   -forward[2],   0.0,
-        0.0,       0.0,      0.0,          1.0
-    };
+    // Preenche a matriz de transformação
+    // m[0][0] = side[0];     m[0][1] = side[1];     m[0][2] = side[2];     m[0][3] = 0;
+    // m[1][0] = up[0];       m[1][1] = up[1];       m[1][2] = up[2];       m[1][3] = 0;
+    // m[2][0] = -forward[0]; m[2][1] = -forward[1]; m[2][2] = -forward[2]; m[2][3] = 0;
+    // m[3][0] = 0;           m[3][1] = 0;           m[3][2] = 0;           m[3][3] = 1;
 
-    // Aplica a matriz de rotação primeiro
-    glMultMatrixf(m);
+    m[0][0] = side[0]; m[0][1] = up[0]; m[0][2] = -forward[0]; m[0][3] = 0;
+    m[1][0] = side[1]; m[1][1] = up[1]; m[1][2] = -forward[1]; m[1][3] = 0;
+    m[2][0] = side[2]; m[2][1] = up[2]; m[2][2] = -forward[2]; m[2][3] = 0;
+    m[3][0] = 0;       m[3][1] = 0;     m[3][2] = 0;           m[3][3] = 1;
 
-    // Aplica a translação depois
+    glMultMatrixf(&m[0][0]);
+
+    // Move para onde o olho está
     glTranslatef(-eyex, -eyey, -eyez);
 }
+
 
 void display(void)
 {
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    //Controla camera
-    if (lookatToggle){
-        //Limpa a cor com azulado
-        glClearColor (0.30, 0.30, 1.0, 0.0);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        //Utiliza uma esfera de raio zoom para guiar a posicao da camera
-        //baseada em dois angulos (do plano XZ e do plano XY)
-        gluLookAt(  zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
-                    zoom*                         sin((camXYAngle*M_PI/180)),
-                    zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
-                    0, 0, 0,
-                    0, 1, 0);
-    } else{
+    // Controla camera
+    if (lookatToggle) {
         // Limpa a cor com azulado
-        glClearColor (1.0, 0.30, 0.30, 0.0);
-        glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClearColor(0.30, 0.30, 1.0, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        // Utiliza uma esfera de raio zoom para guiar a posicao da camera
+        // Baseada em dois angulos (do plano XZ e do plano XY)
+        gluLookAt(zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
+                  zoom*                         sin((camXYAngle*M_PI/180)),
+                  zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
+                  0, 0, 0,
+                  0, 1, 0);
+    } else {
+        // Limpa a cor com azulado
+        glClearColor(1.0, 0.30, 0.30, 0.0);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         MygluLookAt(zoom*sin(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
                     zoom*                         sin((camXYAngle*M_PI/180)),
                     zoom*cos(camXZAngle*M_PI/180)*cos((camXYAngle*M_PI/180)),
@@ -278,7 +281,7 @@ void display(void)
     
     desenhaJogador();
 
-    //Define e desenha a fonte de luz
+    // Define e desenha a fonte de luz
     GLfloat light_position[] = {10, 10, 50, 1};
     glLightfv(GL_LIGHT0,GL_POSITION,light_position);
     glDisable(GL_LIGHTING);
@@ -286,10 +289,10 @@ void display(void)
         glColor3f(1.0,1.0,0.0);
         glBegin(GL_POINTS);
             glVertex3f(light_position[0],light_position[1],light_position[2]);
-        glEnd();    
+        glEnd();
     glEnable(GL_LIGHTING);
     
-    glutSwapBuffers ();
+    glutSwapBuffers();
 }
 
 void keyPress(unsigned char key, int x, int y)
