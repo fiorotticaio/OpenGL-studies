@@ -408,6 +408,8 @@ void mouse_callback(int button, int state, int x, int y)
 
 void mouse_motion(int x, int y)
 {
+    printf("x: %d y: %d\n", x, y);
+
     if (!buttonDown)
         return;
     
