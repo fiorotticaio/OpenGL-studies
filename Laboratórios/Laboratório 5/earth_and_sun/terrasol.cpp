@@ -170,7 +170,7 @@ void DisplayPlane (GLuint texture)
     double textureS = 1; // Bigger than 1, repeat
     glBegin (GL_QUADS);
         glNormal3f(0,1,0);
-        glTexCoord2f (0, 0);
+        glTexCoord2f (0, 0); // Coordenada (0,0) da textura é o (-1, 0, -1) do plano
         glVertex3f (-1, 0, -1);
         glNormal3f(0,1,0);
         glTexCoord2f (0, textureS);
@@ -201,7 +201,7 @@ void DisplaySun (GLuint textureSun)
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,GL_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,GL_LINEAR );
 
-    glBindTexture (GL_TEXTURE_2D, textureSun);
+    glBindTexture (GL_TEXTURE_2D, textureSun); // Aponta para o container de textura do sol
     glBegin (GL_TRIANGLE_STRIP);
     for ( int i = 0; i <objSun->numVtx; i++)
     {
@@ -313,6 +313,8 @@ void display (void) {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glLoadIdentity();
 
+    // Sistema de coordenadas da câmera
+
     if (toggleCam == 0){
         PrintText(0.1, 0.1, "Movable Camera", 0,1,0);
         glTranslatef(0,0,-camDist);
@@ -325,6 +327,8 @@ void display (void) {
         PrintText(0.1, 0.1, "Sun Camera", 0,1,0);
         gluLookAt(0,0,0, -sin(angleYear/180*M_PI),0,-cos(angleYear/180*M_PI), 0,1,0);
     }
+
+    // Sistema de coordenadas do mundo
 
     GLfloat light_position[] = { 0.0, 0.0, 0.0, 1.0 };
     glLightfv(GL_LIGHT0, GL_POSITION, light_position);
@@ -339,20 +343,20 @@ void display (void) {
     if (toggleCam != 2){
         DrawAxes();
         glPushMatrix();
-            glRotatef(90,1,0,0);
+            glRotatef(90,1,0,0); // Pra ajudar na hora de colocar a textura
             DisplaySun(textureSun);
         glPopMatrix();
         RasterChars(0, objSun->radius, 0, "Sun",  0, 1, 0);
     }   
     
     glPushMatrix();
-        glRotatef(angleYear,0,1,0);
+        glRotatef(angleYear,0,1,0); // Rotação em torno do sol
 
         glTranslatef(0,0,-10);
         RasterChars(0, objEarth->radius, 0, "Earth",  0, 1, 0);
 
-        glRotatef(angleDay,0,1,0);
-        glRotatef(90,1,0,0);
+        glRotatef(angleDay,0,1,0); // Rotação em torno do próprio eixo da terra
+        glRotatef(90,1,0,0); // Em pé em y
         DisplayEarth(textureEarth);
     glPopMatrix();
 
@@ -534,7 +538,7 @@ GLuint LoadTextureRAW( const char * filename )
     
     Image* image = loadBMP(filename);
 
-    glGenTextures( 1, &texture );
+    glGenTextures( 1, &texture ); // Cria o container de textura
     glBindTexture( GL_TEXTURE_2D, texture );
     glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_MODULATE );
 //    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_REPLACE );
@@ -543,7 +547,7 @@ GLuint LoadTextureRAW( const char * filename )
     glTexImage2D(GL_TEXTURE_2D,                //Always GL_TEXTURE_2D
                              0,                            //0 for now
                              GL_RGB,                       //Format OpenGL uses for image
-                             image->width, image->height,  //Width and height
+                             image->width, image->height,  //Width and height pixels
                              0,                            //The border of the image
                              GL_RGB, //GL_RGB, because pixels are stored in RGB format
                              GL_UNSIGNED_BYTE, //GL_UNSIGNED_BYTE, because pixels are stored
